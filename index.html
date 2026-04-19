@@ -114,6 +114,55 @@
             box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
         }
 
+        .options-container {
+            margin: 25px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f9f9ff;
+            transform: translateX(5px);
+        }
+
+        .option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .option label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 1em;
+            color: #333;
+            margin: 0;
+        }
+
+        .option input[type="radio"]:checked + label {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .option input[type="radio"]:checked {
+            accent-color: #667eea;
+        }
+
         .button-group {
             display: flex;
             gap: 10px;
@@ -260,58 +309,258 @@
     </div>
 
     <script>
-        // Quiz Questions
+        // Quiz Questions with MCQ Options
         const questions = [
-            "Smart Grid follows which type of flow of energy?",
-            "Which among the following is the most on-premise cloud deployment model?",
-            "Which among the following is a limitation of the traditional non-SDN networks?",
-            "What function is used to set the servo motor to a specific angle?",
-            "What is the role of a Hypervisor (most probable answer)?",
-            "During remote server access using socket programming what is the utility of the <socket_name>.listen() function?",
-            "Which of the following is not a vulnerability of Smart Grid?",
-            "What is Sensor Openflow?",
-            "Which of the following technologies have applications in IoT?",
-            "What is the full form of IoT?",
-            "Which protocol is used for real-time communication in IoT?",
-            "What are the main components of an IoT system?",
-            "Define latency in the context of IoT networks.",
-            "Which of the following is an example of an actuator?",
-            "What is the purpose of a gateway in an IoT system?",
-            "Which security protocol is commonly used in IoT?",
-            "What is edge computing?",
-            "Define the term 'fog computing'.",
-            "Which wireless technology has the longest range for IoT?",
-            "What is MQTT in IoT?",
-            "Explain the importance of data analytics in IoT.",
-            "What is cloud computing's role in IoT?",
-            "Define machine learning in the context of IoT.",
-            "What is interoperability in IoT systems?",
-            "Which communication protocol is used for smart home devices?",
-            "What is the Internet Protocol version used in IoT?",
-            "Define bandwidth in IoT networks.",
-            "What are the challenges in IoT security?",
-            "Explain the concept of scalability in IoT.",
-            "What is the role of microcontrollers in IoT?",
-            "Which of the following is a real-time operating system for IoT?",
-            "What is the purpose of sensors in an IoT ecosystem?",
-            "Define actuators and their importance.",
-            "What is data aggregation in IoT?",
-            "Explain the concept of digital twins.",
-            "What is the Internet of Things in smart cities?",
-            "Which technology enables remote monitoring in IoT?",
-            "Define network latency.",
-            "What is the role of artificial intelligence in IoT?",
-            "Explain the concept of autonomous systems in IoT.",
-            "What are the environmental factors affecting IoT devices?",
-            "Define reliability in IoT systems.",
-            "What is the importance of standardization in IoT?",
-            "Explain the concept of IoT middleware.",
-            "What is the role of APIs in IoT platforms?",
-            "Define privacy in the context of IoT.",
-            "What are the regulatory compliance requirements for IoT?",
-            "Explain the concept of predictive maintenance using IoT.",
-            "What is the role of big data in IoT?",
-            "Define the term 'Internet of Everything'."
+            {
+                question: "Smart Grid follows which type of flow of energy?",
+                options: ["Unidirectional flow", "Bidirectional flow", "Random flow", "Static flow"],
+                correct: 1
+            },
+            {
+                question: "Which among the following is the most on-premise cloud deployment model?",
+                options: ["Public Cloud", "Private Cloud", "Hybrid Cloud", "Community Cloud"],
+                correct: 1
+            },
+            {
+                question: "Which among the following is a limitation of the traditional non-SDN networks?",
+                options: ["Easy to manage", "Centralized control", "Vendor dependency and inflexibility", "Low cost"],
+                correct: 2
+            },
+            {
+                question: "What function is used to set the servo motor to a specific angle?",
+                options: ["write()", "setAngle()", "digitalWrite()", "setServo()"],
+                correct: 3
+            },
+            {
+                question: "What is the role of a Hypervisor (most probable answer)?",
+                options: ["Manage user data", "Control hardware resources and virtual machines", "Execute network protocols", "Manage user interface"],
+                correct: 1
+            },
+            {
+                question: "During remote server access using socket programming what is the utility of the listen() function?",
+                options: ["Establish connection", "Listen for incoming client connections", "Send data", "Close socket"],
+                correct: 1
+            },
+            {
+                question: "Which of the following is not a vulnerability of Smart Grid?",
+                options: ["Cyber attacks", "Data breaches", "Increased efficiency", "Malware threats"],
+                correct: 2
+            },
+            {
+                question: "What is Sensor Openflow?",
+                options: ["A type of sensor", "Software-defined networking for IoT", "A cloud platform", "A mobile application"],
+                correct: 1
+            },
+            {
+                question: "Which of the following technologies have applications in IoT?",
+                options: ["Artificial Intelligence", "Machine Learning", "Big Data Analytics", "All of the above"],
+                correct: 3
+            },
+            {
+                question: "What is the full form of IoT?",
+                options: ["Internet of Things", "Internet of Technology", "Internet of Transmissions", "Internet of Tools"],
+                correct: 0
+            },
+            {
+                question: "Which protocol is used for real-time communication in IoT?",
+                options: ["HTTP", "FTP", "MQTT", "SMTP"],
+                correct: 2
+            },
+            {
+                question: "What are the main components of an IoT system?",
+                options: ["Sensors only", "Sensors, Actuators, and Cloud", "Database only", "Network only"],
+                correct: 1
+            },
+            {
+                question: "Define latency in the context of IoT networks.",
+                options: ["Bandwidth capacity", "Delay in data transmission", "Data storage", "Network speed"],
+                correct: 1
+            },
+            {
+                question: "Which of the following is an example of an actuator?",
+                options: ["Temperature sensor", "Motor", "Accelerometer", "Light sensor"],
+                correct: 1
+            },
+            {
+                question: "What is the purpose of a gateway in an IoT system?",
+                options: ["Store data", "Bridge between devices and cloud", "Generate power", "Control user interface"],
+                correct: 1
+            },
+            {
+                question: "Which security protocol is commonly used in IoT?",
+                options: ["HTTP", "HTTPS/TLS", "FTP", "DNS"],
+                correct: 1
+            },
+            {
+                question: "What is edge computing?",
+                options: ["Cloud computing", "Processing data near the source/edge", "Server computing", "Client computing"],
+                correct: 1
+            },
+            {
+                question: "Define the term 'fog computing'.",
+                options: ["Cloud computing extended to the edge", "Weather-based computing", "Server computing", "Local area computing"],
+                correct: 0
+            },
+            {
+                question: "Which wireless technology has the longest range for IoT?",
+                options: ["Bluetooth", "WiFi", "LoRaWAN", "Zigbee"],
+                correct: 2
+            },
+            {
+                question: "What is MQTT in IoT?",
+                options: ["Messaging protocol for IoT", "Memory management tool", "Data storage service", "Security protocol"],
+                correct: 0
+            },
+            {
+                question: "Explain the importance of data analytics in IoT.",
+                options: ["Store large amounts of data", "Extract insights and make predictions", "Increase bandwidth", "Reduce device power"],
+                correct: 1
+            },
+            {
+                question: "What is cloud computing's role in IoT?",
+                options: ["Generate electricity", "Process and store IoT data", "Manage devices only", "Provide user interface"],
+                correct: 1
+            },
+            {
+                question: "Define machine learning in the context of IoT.",
+                options: ["Programming machines", "Systems learning from data to make predictions", "Operating machinery", "Network management"],
+                correct: 1
+            },
+            {
+                question: "What is interoperability in IoT systems?",
+                options: ["Ability of different systems to work together", "High speed", "Low cost", "Energy efficiency"],
+                correct: 0
+            },
+            {
+                question: "Which communication protocol is used for smart home devices?",
+                options: ["MQTT", "Zigbee", "Z-Wave", "All of the above"],
+                correct: 3
+            },
+            {
+                question: "What is the Internet Protocol version used in IoT?",
+                options: ["IPv4 only", "IPv6 primarily", "IPv3", "Both IPv4 and IPv6"],
+                correct: 3
+            },
+            {
+                question: "Define bandwidth in IoT networks.",
+                options: ["Network speed", "Data transmission capacity", "Memory size", "Processing power"],
+                correct: 1
+            },
+            {
+                question: "What are the challenges in IoT security?",
+                options: ["Device heterogeneity", "Data privacy", "Cyber threats", "All of the above"],
+                correct: 3
+            },
+            {
+                question: "Explain the concept of scalability in IoT.",
+                options: ["Cost reduction", "System capacity to handle growth", "Increased complexity", "More devices"],
+                correct: 1
+            },
+            {
+                question: "What is the role of microcontrollers in IoT?",
+                options: ["Store data", "Control and process data in IoT devices", "Transmit signals", "Generate power"],
+                correct: 1
+            },
+            {
+                question: "Which of the following is a real-time operating system for IoT?",
+                options: ["Windows", "Linux", "FreeRTOS", "macOS"],
+                correct: 2
+            },
+            {
+                question: "What is the purpose of sensors in an IoT ecosystem?",
+                options: ["Control devices", "Detect and measure physical parameters", "Store data", "Process information"],
+                correct: 1
+            },
+            {
+                question: "Define actuators and their importance.",
+                options: ["Devices that sense data", "Devices that perform actions based on commands", "Storage devices", "Network devices"],
+                correct: 1
+            },
+            {
+                question: "What is data aggregation in IoT?",
+                options: ["Collecting data from multiple sources", "Storing data", "Processing data", "Transmitting data"],
+                correct: 0
+            },
+            {
+                question: "Explain the concept of digital twins.",
+                options: ["Two separate systems", "Virtual replica of physical assets", "Backup systems", "Redundant devices"],
+                correct: 1
+            },
+            {
+                question: "What is the Internet of Things in smart cities?",
+                options: ["Network of physical devices in urban areas", "City network only", "Cloud storage", "Data centers"],
+                correct: 0
+            },
+            {
+                question: "Which technology enables remote monitoring in IoT?",
+                options: ["Sensors and Communication networks", "Only cameras", "Mobile devices", "Servers"],
+                correct: 0
+            },
+            {
+                question: "Define network latency.",
+                options: ["Data size", "Delay in communication", "Bandwidth", "Connection type"],
+                correct: 1
+            },
+            {
+                question: "What is the role of artificial intelligence in IoT?",
+                options: ["Generate data", "Analyze data and make intelligent decisions", "Store information", "Transmit signals"],
+                correct: 1
+            },
+            {
+                question: "Explain the concept of autonomous systems in IoT.",
+                options: ["Self-operating systems without human intervention", "Manual control systems", "Supervised systems", "Dependent systems"],
+                correct: 0
+            },
+            {
+                question: "What are the environmental factors affecting IoT devices?",
+                options: ["Temperature and humidity only", "Temperature, humidity, pressure, etc.", "Only temperature", "Only location"],
+                correct: 1
+            },
+            {
+                question: "Define reliability in IoT systems.",
+                options: ["High speed", "Consistency in performance and operation", "Low cost", "Easy to use"],
+                correct: 1
+            },
+            {
+                question: "What is the importance of standardization in IoT?",
+                options: ["Reduce costs", "Ensure interoperability and compatibility", "Increase complexity", "Limit innovation"],
+                correct: 1
+            },
+            {
+                question: "Explain the concept of IoT middleware.",
+                options: ["Cloud platform", "Software layer enabling communication between devices and applications", "Network device", "Storage system"],
+                correct: 1
+            },
+            {
+                question: "What is the role of APIs in IoT platforms?",
+                options: ["Store data", "Enable integration and communication", "Generate reports", "Create interfaces"],
+                correct: 1
+            },
+            {
+                question: "Define privacy in the context of IoT.",
+                options: ["Data storage", "Protection of personal data and information", "Network security", "Device security"],
+                correct: 1
+            },
+            {
+                question: "What are the regulatory compliance requirements for IoT?",
+                options: ["Optional guidelines", "Mandatory rules like GDPR, CCPA", "Only for data centers", "No requirements"],
+                correct: 1
+            },
+            {
+                question: "Explain the concept of predictive maintenance using IoT.",
+                options: ["Fixing devices randomly", "Using data to predict failures before they occur", "Regular maintenance only", "Emergency repairs"],
+                correct: 1
+            },
+            {
+                question: "What is the role of big data in IoT?",
+                options: ["Increase storage costs", "Process and analyze large volumes of data for insights", "Reduce efficiency", "Complicate systems"],
+                correct: 1
+            },
+            {
+                question: "Define the term 'Internet of Everything'.",
+                options: ["IoT only", "Expansion of IoT including devices, data, processes, and people", "Cloud computing", "Artificial intelligence"],
+                correct: 1
+            }
         ];
 
         let currentQuestion = 0;
@@ -319,19 +568,32 @@
 
         function initQuiz() {
             const container = document.getElementById('quizContainer');
-            questions.forEach((question, index) => {
+            questions.forEach((q, index) => {
                 const section = document.createElement('div');
                 section.className = 'question-section';
                 section.id = `question-${index}`;
                 
+                let optionsHtml = '';
+                q.options.forEach((option, optIndex) => {
+                    optionsHtml += `
+                        <div class="option">
+                            <input type="radio" 
+                                   id="option-${index}-${optIndex}" 
+                                   name="answer-${index}" 
+                                   value="${optIndex}"
+                                   onchange="saveAnswer(${index}, ${optIndex})"
+                                   ${answers[index] === optIndex ? 'checked' : ''}>
+                            <label for="option-${index}-${optIndex}">${option}</label>
+                        </div>
+                    `;
+                });
+                
                 section.innerHTML = `
                     <div class="question-counter">Question ${index + 1} of ${questions.length}</div>
-                    <div class="question-text">${question}</div>
-                    <input type="text" 
-                           class="answer-input" 
-                           id="answer-${index}"
-                           placeholder="Your answer here..."
-                           onchange="saveAnswer(${index})">
+                    <div class="question-text">${q.question}</div>
+                    <div class="options-container">
+                        ${optionsHtml}
+                    </div>
                     <div class="button-group">
                         <button class="btn-prev" id="btn-prev-${index}" onclick="previousQuestion()" ${index === 0 ? 'disabled' : ''}>← Previous</button>
                         <button class="btn-next" id="btn-next-${index}" onclick="nextQuestion()">${index === questions.length - 1 ? 'Submit Quiz' : 'Next →'}</button>
@@ -350,11 +612,6 @@
             });
             
             document.getElementById(`question-${index}`).classList.add('active');
-            
-            // Load saved answer
-            if (answers[index]) {
-                document.getElementById(`answer-${index}`).value = answers[index];
-            }
 
             // Update progress bar
             const progress = ((index + 1) / questions.length) * 100;
@@ -367,14 +624,11 @@
             prevBtn.disabled = index === 0;
         }
 
-        function saveAnswer(index) {
-            const answer = document.getElementById(`answer-${index}`).value;
-            answers[index] = answer;
+        function saveAnswer(index, optionIndex) {
+            answers[index] = optionIndex;
         }
 
         function nextQuestion() {
-            saveAnswer(currentQuestion);
-            
             if (currentQuestion < questions.length - 1) {
                 showQuestion(currentQuestion + 1);
             } else {
@@ -383,29 +637,53 @@
         }
 
         function previousQuestion() {
-            saveAnswer(currentQuestion);
             if (currentQuestion > 0) {
                 showQuestion(currentQuestion - 1);
             }
         }
 
         function submitQuiz() {
-            // Save all answers
-            questions.forEach((_, index) => {
-                saveAnswer(index);
+            // Calculate score
+            let score = 0;
+            let answered = 0;
+            
+            questions.forEach((question, index) => {
+                if (answers[index] !== undefined) {
+                    answered++;
+                    if (answers[index] === question.correct) {
+                        score++;
+                    }
+                }
             });
 
             // Hide quiz, show results
             document.getElementById('quizContainer').style.display = 'none';
             document.getElementById('resultsContainer').classList.add('show');
 
-            // Display answers
+            // Display score
+            const percentage = Math.round((score / questions.length) * 100);
+            const scoreDisplay = document.querySelector('.results h2');
+            scoreDisplay.innerHTML = `Quiz Completed!<br><span style="font-size: 1.5em; color: ${percentage >= 70 ? '#43e97b' : '#f5576c'};">Score: ${score}/${questions.length} (${percentage}%)</span>`;
+
+            // Display answers with correct/incorrect feedback
             const answersDisplay = document.getElementById('answersDisplay');
-            let html = '<table class="results-table"><thead><tr><th>Q#</th><th>Question</th><th>Your Answer</th></tr></thead><tbody>';
+            let html = '<table class="results-table"><thead><tr><th>Q#</th><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Status</th></tr></thead><tbody>';
             
             questions.forEach((question, index) => {
-                const answer = answers[index] || '(No answer provided)';
-                html += `<tr><td>${index + 1}</td><td>${question}</td><td>${answer}</td></tr>`;
+                const userAnswerIdx = answers[index];
+                const userAnswer = userAnswerIdx !== undefined ? question.options[userAnswerIdx] : '(Not answered)';
+                const correctAnswer = question.options[question.correct];
+                const isCorrect = userAnswerIdx === question.correct;
+                const status = isCorrect ? '✓ Correct' : '✗ Incorrect';
+                const statusColor = isCorrect ? '#43e97b' : '#f5576c';
+                
+                html += `<tr style="border-left: 4px solid ${statusColor};">
+                    <td>${index + 1}</td>
+                    <td>${question.question}</td>
+                    <td style="color: ${isCorrect ? '#333' : '#f5576c'}">${userAnswer}</td>
+                    <td style="color: #43e97b; font-weight: bold">${correctAnswer}</td>
+                    <td style="color: ${statusColor}; font-weight: bold">${status}</td>
+                </tr>`;
             });
             
             html += '</tbody></table>';
@@ -414,18 +692,33 @@
 
         function downloadAnswers() {
             let content = 'IoT Quiz - 50 Questions\n';
-            content += 'Your Answers\n';
-            content += '=' .repeat(80) + '\n\n';
+            content += 'Your Answers and Results\n';
+            content += '='.repeat(100) + '\n\n';
 
+            let score = 0;
             questions.forEach((question, index) => {
-                content += `Question ${index + 1}: ${question}\n`;
-                content += `Your Answer: ${answers[index] || '(No answer)'}\n`;
-                content += '\n';
+                const userAnswerIdx = answers[index];
+                const userAnswer = userAnswerIdx !== undefined ? question.options[userAnswerIdx] : '(Not answered)';
+                const correctAnswer = question.options[question.correct];
+                const isCorrect = userAnswerIdx === question.correct;
+                
+                if (isCorrect) score++;
+                
+                content += `Question ${index + 1}: ${question.question}\n`;
+                content += `Your Answer: ${userAnswer}\n`;
+                content += `Correct Answer: ${correctAnswer}\n`;
+                content += `Status: ${isCorrect ? 'CORRECT ✓' : 'INCORRECT ✗'}\n`;
+                content += '\n' + '-'.repeat(100) + '\n\n';
             });
+
+            const percentage = Math.round((score / questions.length) * 100);
+            content += '\n' + '='.repeat(100) + '\n';
+            content += `FINAL SCORE: ${score}/${questions.length} (${percentage}%)\n`;
+            content += '='.repeat(100) + '\n';
 
             const element = document.createElement('a');
             element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-            element.setAttribute('download', 'IoT_Quiz_Answers.txt');
+            element.setAttribute('download', 'IoT_Quiz_Results.txt');
             element.style.display = 'none';
             document.body.appendChild(element);
             element.click();
