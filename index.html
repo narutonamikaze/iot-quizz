@@ -373,8 +373,8 @@
     </div>
 
     <script>
-        // Quiz Questions with MCQ Options
-        const questions = [
+        // Question bank with MCQ options
+        const questionBank = [
             {
                 question: "Smart Grid follows which type of flow of energy?",
                 options: ["Unidirectional flow", "Bidirectional flow", "Random flow", "Static flow"],
@@ -626,6 +626,17 @@
                 correct: 1
             }
         ];
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Randomize question order on every page refresh
+        const questions = shuffleArray([...questionBank]);
 
         let currentQuestion = 0;
         let answers = {};
