@@ -276,12 +276,76 @@
             border-radius: 5px;
             color: #333;
         }
+
+        .feedback-section {
+            display: none;
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 8px;
+            animation: slideDown 0.3s ease;
+        }
+
+        .feedback-section.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback-correct {
+            background: #e8f9f5;
+            border: 2px solid #43e97b;
+            color: #0d7761;
+        }
+
+        .feedback-incorrect {
+            background: #ffe8e8;
+            border: 2px solid #f5576c;
+            color: #8b0000;
+        }
+
+        .feedback-header {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-correct .feedback-header {
+            color: #43e97b;
+        }
+
+        .feedback-incorrect .feedback-header {
+            color: #f5576c;
+        }
+
+        .feedback-content {
+            margin: 10px 0 0 0;
+            line-height: 1.6;
+        }
+
+        .correct-answer-label {
+            font-weight: bold;
+            color: #43e97b;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>🚀 IoT Quiz</h1>
+            <p style="font-size: 1.3em; color: #667eea; font-weight: bold; margin-top: 15px;">Welcome, Vagish Rao! 👋</p>
             <p>Internet of Things - 50 Random Questions</p>
         </div>
 
@@ -565,6 +629,7 @@
 
         let currentQuestion = 0;
         let answers = {};
+        let answered = {};
 
         function initQuiz() {
             const container = document.getElementById('quizContainer');
@@ -594,9 +659,12 @@
                     <div class="options-container">
                         ${optionsHtml}
                     </div>
+                    <div class="feedback-section" id="feedback-${index}">
+                        <div class="feedback-content"></div>
+                    </div>
                     <div class="button-group">
                         <button class="btn-prev" id="btn-prev-${index}" onclick="previousQuestion()" ${index === 0 ? 'disabled' : ''}>← Previous</button>
-                        <button class="btn-next" id="btn-next-${index}" onclick="nextQuestion()">${index === questions.length - 1 ? 'Submit Quiz' : 'Next →'}</button>
+                        <button class="btn-next" id="btn-next-${index}" onclick="nextQuestion()" disabled>${index === questions.length - 1 ? 'Submit Quiz' : 'Next →'}</button>
                     </div>
                 `;
                 
@@ -622,10 +690,56 @@
             // Disable/enable prev button
             const prevBtn = document.querySelector('.btn-prev');
             prevBtn.disabled = index === 0;
+
+            // Scroll to top
+            document.querySelector('.container').scrollTop = 0;
         }
 
         function saveAnswer(index, optionIndex) {
             answers[index] = optionIndex;
+            answered[index] = true;
+
+            // Show feedback immediately
+            showFeedback(index);
+
+            // Enable next button
+            document.getElementById(`btn-next-${index}`).disabled = false;
+
+            // Disable all options after selection
+            const options = document.querySelectorAll(`input[name="answer-${index}"]`);
+            options.forEach(opt => {
+                opt.disabled = true;
+            });
+        }
+
+        function showFeedback(index) {
+            const question = questions[index];
+            const selectedOption = answers[index];
+            const feedbackDiv = document.getElementById(`feedback-${index}`);
+            const isCorrect = selectedOption === question.correct;
+            
+            let feedbackHTML = '';
+
+            if (isCorrect) {
+                feedbackHTML = `
+                    <div class="feedback-header">✓ Correct Answer!</div>
+                    <div class="feedback-content">
+                        Great job! You selected the right option.
+                    </div>
+                `;
+                feedbackDiv.className = 'feedback-section feedback-correct show';
+            } else {
+                feedbackHTML = `
+                    <div class="feedback-header">✗ Incorrect</div>
+                    <div class="feedback-content">
+                        Your answer: <strong>${question.options[selectedOption]}</strong>
+                        <div class="correct-answer-label">Correct answer: ${question.options[question.correct]}</div>
+                    </div>
+                `;
+                feedbackDiv.className = 'feedback-section feedback-incorrect show';
+            }
+
+            feedbackDiv.innerHTML = feedbackHTML;
         }
 
         function nextQuestion() {
@@ -645,14 +759,10 @@
         function submitQuiz() {
             // Calculate score
             let score = 0;
-            let answered = 0;
             
             questions.forEach((question, index) => {
-                if (answers[index] !== undefined) {
-                    answered++;
-                    if (answers[index] === question.correct) {
-                        score++;
-                    }
+                if (answers[index] === question.correct) {
+                    score++;
                 }
             });
 
@@ -663,7 +773,21 @@
             // Display score
             const percentage = Math.round((score / questions.length) * 100);
             const scoreDisplay = document.querySelector('.results h2');
-            scoreDisplay.innerHTML = `Quiz Completed!<br><span style="font-size: 1.5em; color: ${percentage >= 70 ? '#43e97b' : '#f5576c'};">Score: ${score}/${questions.length} (${percentage}%)</span>`;
+            
+            let performanceMessage = '';
+            if (percentage >= 90) {
+                performanceMessage = '🌟 Outstanding!';
+            } else if (percentage >= 80) {
+                performanceMessage = '🎉 Excellent!';
+            } else if (percentage >= 70) {
+                performanceMessage = '👍 Good Job!';
+            } else if (percentage >= 60) {
+                performanceMessage = '📚 Keep Learning!';
+            } else {
+                performanceMessage = '💪 Keep Trying!';
+            }
+
+            scoreDisplay.innerHTML = `Quiz Completed!<br><span style="font-size: 1.4em; color: ${percentage >= 70 ? '#43e97b' : '#f5576c'};">${performanceMessage}</span><br><span style="font-size: 1.5em; color: #667eea;">Score: ${score}/${questions.length} (${percentage}%)</span>`;
 
             // Display answers with correct/incorrect feedback
             const answersDisplay = document.getElementById('answersDisplay');
@@ -691,11 +815,12 @@
         }
 
         function downloadAnswers() {
+            let score = 0;
             let content = 'IoT Quiz - 50 Questions\n';
+            content += 'Student: Vagish Rao\n';
             content += 'Your Answers and Results\n';
             content += '='.repeat(100) + '\n\n';
 
-            let score = 0;
             questions.forEach((question, index) => {
                 const userAnswerIdx = answers[index];
                 const userAnswer = userAnswerIdx !== undefined ? question.options[userAnswerIdx] : '(Not answered)';
@@ -718,7 +843,7 @@
 
             const element = document.createElement('a');
             element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-            element.setAttribute('download', 'IoT_Quiz_Results.txt');
+            element.setAttribute('download', 'IoT_Quiz_Results_Vagish_Rao.txt');
             element.style.display = 'none';
             document.body.appendChild(element);
             element.click();
