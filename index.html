@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Quiz - 50 Questions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-section {
+            display: none;
+        }
+
+        .question-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-counter {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            color: #333;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 12px;
+            margin: 20px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-prev {
+            background: #ccc;
+            color: #333;
+        }
+
+        .btn-prev:hover {
+            background: #bbb;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .results h2 {
+            font-size: 2em;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .results-table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .results-table th {
+            background: #f5f5f5;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .results-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .btn-restart {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            margin-top: 20px;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .instruction {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 IoT Quiz</h1>
+            <p>Internet of Things - 50 Random Questions</p>
+        </div>
+
+        <div class="instruction">
+            <strong>Instructions:</strong> Answer all 50 questions. Your answers will be saved as you progress. You can review your responses before submitting.
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div id="quizContainer">
+            <!-- Questions will be inserted here -->
+        </div>
+
+        <div id="resultsContainer" class="results">
+            <h2>Quiz Completed!</h2>
+            <p style="font-size: 1.2em; color: #666; margin: 20px 0;">
+                You have completed all 50 questions.
+            </p>
+            <div id="answersDisplay"></div>
+            <button class="btn-restart" onclick="location.reload()">Start Over</button>
+            <button class="btn-download" onclick="downloadAnswers()">Download Your Answers</button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Questions
+        const questions = [
+            "Smart Grid follows which type of flow of energy?",
+            "Which among the following is the most on-premise cloud deployment model?",
+            "Which among the following is a limitation of the traditional non-SDN networks?",
+            "What function is used to set the servo motor to a specific angle?",
+            "What is the role of a Hypervisor (most probable answer)?",
+            "During remote server access using socket programming what is the utility of the <socket_name>.listen() function?",
+            "Which of the following is not a vulnerability of Smart Grid?",
+            "What is Sensor Openflow?",
+            "Which of the following technologies have applications in IoT?",
+            "What is the full form of IoT?",
+            "Which protocol is used for real-time communication in IoT?",
+            "What are the main components of an IoT system?",
+            "Define latency in the context of IoT networks.",
+            "Which of the following is an example of an actuator?",
+            "What is the purpose of a gateway in an IoT system?",
+            "Which security protocol is commonly used in IoT?",
+            "What is edge computing?",
+            "Define the term 'fog computing'.",
+            "Which wireless technology has the longest range for IoT?",
+            "What is MQTT in IoT?",
+            "Explain the importance of data analytics in IoT.",
+            "What is cloud computing's role in IoT?",
+            "Define machine learning in the context of IoT.",
+            "What is interoperability in IoT systems?",
+            "Which communication protocol is used for smart home devices?",
+            "What is the Internet Protocol version used in IoT?",
+            "Define bandwidth in IoT networks.",
+            "What are the challenges in IoT security?",
+            "Explain the concept of scalability in IoT.",
+            "What is the role of microcontrollers in IoT?",
+            "Which of the following is a real-time operating system for IoT?",
+            "What is the purpose of sensors in an IoT ecosystem?",
+            "Define actuators and their importance.",
+            "What is data aggregation in IoT?",
+            "Explain the concept of digital twins.",
+            "What is the Internet of Things in smart cities?",
+            "Which technology enables remote monitoring in IoT?",
+            "Define network latency.",
+            "What is the role of artificial intelligence in IoT?",
+            "Explain the concept of autonomous systems in IoT.",
+            "What are the environmental factors affecting IoT devices?",
+            "Define reliability in IoT systems.",
+            "What is the importance of standardization in IoT?",
+            "Explain the concept of IoT middleware.",
+            "What is the role of APIs in IoT platforms?",
+            "Define privacy in the context of IoT.",
+            "What are the regulatory compliance requirements for IoT?",
+            "Explain the concept of predictive maintenance using IoT.",
+            "What is the role of big data in IoT?",
+            "Define the term 'Internet of Everything'."
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+
+        function initQuiz() {
+            const container = document.getElementById('quizContainer');
+            questions.forEach((question, index) => {
+                const section = document.createElement('div');
+                section.className = 'question-section';
+                section.id = `question-${index}`;
+                
+                section.innerHTML = `
+                    <div class="question-counter">Question ${index + 1} of ${questions.length}</div>
+                    <div class="question-text">${question}</div>
+                    <input type="text" 
+                           class="answer-input" 
+                           id="answer-${index}"
+                           placeholder="Your answer here..."
+                           onchange="saveAnswer(${index})">
+                    <div class="button-group">
+                        <button class="btn-prev" id="btn-prev-${index}" onclick="previousQuestion()" ${index === 0 ? 'disabled' : ''}>← Previous</button>
+                        <button class="btn-next" id="btn-next-${index}" onclick="nextQuestion()">${index === questions.length - 1 ? 'Submit Quiz' : 'Next →'}</button>
+                    </div>
+                `;
+                
+                container.appendChild(section);
+            });
+
+            showQuestion(0);
+        }
+
+        function showQuestion(index) {
+            document.querySelectorAll('.question-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            document.getElementById(`question-${index}`).classList.add('active');
+            
+            // Load saved answer
+            if (answers[index]) {
+                document.getElementById(`answer-${index}`).value = answers[index];
+            }
+
+            // Update progress bar
+            const progress = ((index + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            currentQuestion = index;
+            
+            // Disable/enable prev button
+            const prevBtn = document.querySelector('.btn-prev');
+            prevBtn.disabled = index === 0;
+        }
+
+        function saveAnswer(index) {
+            const answer = document.getElementById(`answer-${index}`).value;
+            answers[index] = answer;
+        }
+
+        function nextQuestion() {
+            saveAnswer(currentQuestion);
+            
+            if (currentQuestion < questions.length - 1) {
+                showQuestion(currentQuestion + 1);
+            } else {
+                submitQuiz();
+            }
+        }
+
+        function previousQuestion() {
+            saveAnswer(currentQuestion);
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+
+        function submitQuiz() {
+            // Save all answers
+            questions.forEach((_, index) => {
+                saveAnswer(index);
+            });
+
+            // Hide quiz, show results
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultsContainer').classList.add('show');
+
+            // Display answers
+            const answersDisplay = document.getElementById('answersDisplay');
+            let html = '<table class="results-table"><thead><tr><th>Q#</th><th>Question</th><th>Your Answer</th></tr></thead><tbody>';
+            
+            questions.forEach((question, index) => {
+                const answer = answers[index] || '(No answer provided)';
+                html += `<tr><td>${index + 1}</td><td>${question}</td><td>${answer}</td></tr>`;
+            });
+            
+            html += '</tbody></table>';
+            answersDisplay.innerHTML = html;
+        }
+
+        function downloadAnswers() {
+            let content = 'IoT Quiz - 50 Questions\n';
+            content += 'Your Answers\n';
+            content += '=' .repeat(80) + '\n\n';
+
+            questions.forEach((question, index) => {
+                content += `Question ${index + 1}: ${question}\n`;
+                content += `Your Answer: ${answers[index] || '(No answer)'}\n`;
+                content += '\n';
+            });
+
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+            element.setAttribute('download', 'IoT_Quiz_Answers.txt');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        // Initialize quiz on page load
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
